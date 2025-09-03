@@ -1,0 +1,122 @@
+# Six Sigma Model Context Protocol Definition
+# Version: 1.0
+# Format: Domain Specific eXchange (DSX)
+
+metadata:
+  name: "Six Sigma AI Development Protocol"
+  version: "1.0.0"
+  description: "Complete MCP orchestration for DMAIC-based AI code generation"
+  author: "Six Sigma AI Framework"
+  created: "2025-01-11"
+
+# Core Protocol Definition
+protocol:
+  name: "six-sigma-mcp"
+  transport: "stdio"
+  version: "1.0"
+  
+  capabilities:
+    - "multi-agent-orchestration"
+    - "shared-resource-management"
+    - "quality-gate-enforcement"
+    - "real-time-constraint-validation"
+    - "claude-code-integration"
+
+# Agent Definitions
+agents:
+  orchestrator:
+    id: "six-sigma-orchestrator"
+    role: "Master Black Belt - Project Orchestration"
+    responsibilities:
+      - "DMAIC phase management"
+      - "Quality gate decisions"
+      - "Agent coordination"
+      - "Project state management"    
+    mcp_endpoints:
+      - name: "project/create"
+        input:
+          project_name: "string"
+          business_case: "string"
+          initial_requirements: "array<string>"
+          deployment_target: "string"
+          budget_constraints: "object"
+        output:
+          project_id: "uuid"
+          charter_draft: "object"
+          
+      - name: "phase/transition"
+        input:
+          project_id: "uuid"
+          from_phase: "enum[DEFINE,MEASURE,ANALYZE,IMPROVE,CONTROL]"
+          to_phase: "enum[DEFINE,MEASURE,ANALYZE,IMPROVE,CONTROL]"
+          gate_results: "object"
+        output:
+          transition_approved: "boolean"
+          next_phase_config: "object"
+          
+    shared_resources:
+      read: ["*"]
+      write: ["project_state", "phase_transitions", "quality_decisions"]
+
+  define_agent:
+    id: "six-sigma-define"
+    role: "Black Belt - Requirements & Constraints"
+    responsibilities:
+      - "Voice of Customer analysis"      - "CTQ tree generation"
+      - "SIPOC mapping"
+      - "Constraint documentation"
+    
+    mcp_endpoints:
+      - name: "voc/analyze"
+        input:
+          raw_requirements: "array<string>"
+          user_personas: "array<object>"
+          use_cases: "array<object>"
+        output:
+          structured_requirements: "object"
+          priority_matrix: "object"
+          
+      - name: "ctq/generate"
+        input:
+          voc_analysis: "object"
+          quality_dimensions: "array<string>"
+          measurement_criteria: "object"
+        output:
+          ctq_tree: "object"
+          measurable_targets: "array<object>"
+          
+      - name: "constraints/compile"
+        input:
+          technical_requirements: "object"
+          deployment_target: "string"
+          performance_needs: "object"
+          budget_limits: "object"        output:
+          constraint_manifest: "object"
+          validation_rules: "array<object>"
+    
+    shared_resources:
+      read: ["project_state"]
+      write: ["requirements", "ctq_tree", "constraints", "sipoc_diagram"]
+
+  measure_agent:
+    id: "six-sigma-measure"
+    role: "Black Belt - Metrics & Baselines"
+    responsibilities:
+      - "KPI definition"
+      - "Baseline establishment"
+      - "Measurement system analysis"
+      - "Data collection planning"
+    
+    mcp_endpoints:
+      - name: "metrics/define"
+        input:
+          ctq_tree: "object"
+          measurement_frequency: "string"
+          data_sources: "array<string>"
+        output:
+          kpi_definitions: "array<object>"
+          collection_plan: "object"
+          
+      - name: "baseline/establish"
+        input:
+          current_process: "string"
