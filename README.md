@@ -4,6 +4,15 @@
 
 A complete implementation of Six Sigma DMAIC methodology as a Model Context Protocol (MCP) server for Claude Desktop. This enables AI-assisted software development with built-in quality controls and systematic process improvement.
 
+### 🆕 Version 2.0 - Enhanced with Subagent Integration
+**NEW**: The enhanced version (`enhanced-six-sigma-server.js`) integrates Claude's specialized subagents to provide:
+- **Real performance metrics** instead of templates
+- **Actual bug detection** with stack traces
+- **Working code improvements** not just recommendations
+- **Live monitoring setup** with real dashboards
+
+See [ENHANCED_IMPLEMENTATION.md](ENHANCED_IMPLEMENTATION.md) for details on the subagent-powered version.
+
 ## ✅ Current Status
 
 **Fully Implemented and Working!** The core Six Sigma MCP server is now complete with all DMAIC phases operational.
