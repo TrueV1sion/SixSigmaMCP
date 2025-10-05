@@ -1,5 +1,5 @@
 import { type Project } from '../lib/supabase';
-import { Clock, TrendingUp, AlertCircle } from 'lucide-react';
+import { Clock, TrendingUp, CircleAlert as AlertCircle } from 'lucide-react';
 
 interface ProjectListProps {
   projects: Project[];

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase, type FMEAItem } from '../../lib/supabase';
-import { CheckCircle2, Trash2, AlertTriangle } from 'lucide-react';
+import { CircleCheck as CheckCircle2, Trash2, TriangleAlert as AlertTriangle } from 'lucide-react';
 
 interface AnalyzePhaseProps {
   projectId: string;

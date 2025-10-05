@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase, type KPI } from '../../lib/supabase';
-import { CheckCircle2, Plus, Trash2 } from 'lucide-react';
+import { CircleCheck as CheckCircle2, Plus, Trash2 } from 'lucide-react';
 
 interface MeasurePhaseProps {
   projectId: string;

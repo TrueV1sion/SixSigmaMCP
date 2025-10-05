@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { type Project, supabase } from '../lib/supabase';
-import { Target, TrendingUp, AlertCircle, Calendar } from 'lucide-react';
+import { Target, TrendingUp, CircleAlert as AlertCircle, Calendar } from 'lucide-react';
 import DefinePhase from './phases/DefinePhase';
 import MeasurePhase from './phases/MeasurePhase';
 import AnalyzePhase from './phases/AnalyzePhase';

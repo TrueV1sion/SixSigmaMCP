@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase, type Solution } from '../../lib/supabase';
-import { CheckCircle2, Trash2, Lightbulb, Star } from 'lucide-react';
+import { CircleCheck as CheckCircle2, Trash2, Lightbulb, Star } from 'lucide-react';
 
 interface ImprovePhaseProps {
   projectId: string;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase, type Requirement, type CTQItem, type Constraint } from '../../lib/supabase';
-import { CheckCircle2, Plus, Trash2 } from 'lucide-react';
+import { CircleCheck as CheckCircle2, Plus, Trash2 } from 'lucide-react';
 
 interface DefinePhaseProps {
   projectId: string;

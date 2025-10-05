@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { CheckCircle2, Shield, Activity, FileText } from 'lucide-react';
+import { CircleCheck as CheckCircle2, Shield, Activity, FileText } from 'lucide-react';
 
 interface ControlPhaseProps {
   projectId: string;
