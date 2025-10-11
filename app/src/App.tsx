@@ -9,9 +9,12 @@ import ProjectDetails from './components/ProjectDetails';
 import CreateProject from './components/CreateProject';
 import SubagentMonitor from './components/SubagentMonitor';
 import Header from './components/Header';
-import { LayoutDashboard, Folder, Activity } from 'lucide-react';
+import { LayoutDashboard, Folder, Activity, BarChart3, FileText } from 'lucide-react';
+import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
+import TemplateGallery from './components/templates/TemplateGallery';
+import CreateTemplate from './components/templates/CreateTemplate';
 
-type View = 'dashboard' | 'projects' | 'monitor';
+type View = 'dashboard' | 'projects' | 'monitor' | 'analytics' | 'templates';
 
 function App() {
   const { profile } = useAuth();
@@ -19,6 +22,7 @@ function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateTemplate, setShowCreateTemplate] = useState(false);
   const [loading, setLoading] = useState(true);
   const [needsOrgSetup, setNeedsOrgSetup] = useState(false);
 
@@ -79,6 +83,8 @@ function App() {
   const navItems = [
     { id: 'dashboard' as View, label: 'Dashboard', icon: LayoutDashboard },
     { id: 'projects' as View, label: 'Projects', icon: Folder },
+    { id: 'analytics' as View, label: 'Analytics', icon: BarChart3 },
+    { id: 'templates' as View, label: 'Templates', icon: FileText },
     { id: 'monitor' as View, label: 'MCP Monitor', icon: Activity },
   ];
 
@@ -153,6 +159,36 @@ function App() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {currentView === 'analytics' && selectedProject && (
+              <AnalyticsDashboard project={selectedProject} />
+            )}
+
+            {currentView === 'analytics' && !selectedProject && (
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+                <div className="text-slate-400 text-lg">
+                  Select a project from the Projects tab to view analytics
+                </div>
+              </div>
+            )}
+
+            {currentView === 'templates' && !showCreateTemplate && (
+              <TemplateGallery
+                onSelectTemplate={(template) => {
+                  console.log('Selected template:', template);
+                }}
+                onCreateNew={() => setShowCreateTemplate(true)}
+              />
+            )}
+
+            {currentView === 'templates' && showCreateTemplate && (
+              <CreateTemplate
+                onCancel={() => setShowCreateTemplate(false)}
+                onSuccess={() => {
+                  setShowCreateTemplate(false);
+                }}
+              />
             )}
 
             {currentView === 'monitor' && <SubagentMonitor />}
