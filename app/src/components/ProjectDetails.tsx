@@ -6,6 +6,7 @@ import MeasurePhase from './phases/MeasurePhase';
 import AnalyzePhase from './phases/AnalyzePhase';
 import ImprovePhase from './phases/ImprovePhase';
 import ControlPhase from './phases/ControlPhase';
+import CommentSection from './collaboration/CommentSection';
 
 interface ProjectDetailsProps {
   project: Project;
@@ -13,7 +14,7 @@ interface ProjectDetailsProps {
 }
 
 export default function ProjectDetails({ project, onUpdate }: ProjectDetailsProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'phases'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'phases' | 'comments'>('overview');
 
   const phases = ['DEFINE', 'MEASURE', 'ANALYZE', 'IMPROVE', 'CONTROL'];
   const currentPhaseIndex = phases.indexOf(project.current_phase);
@@ -117,6 +118,16 @@ export default function ProjectDetails({ project, onUpdate }: ProjectDetailsProp
             >
               DMAIC Phases
             </button>
+            <button
+              onClick={() => setActiveTab('comments')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                activeTab === 'comments'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              Comments
+            </button>
           </div>
         </div>
       </div>
@@ -200,6 +211,12 @@ export default function ProjectDetails({ project, onUpdate }: ProjectDetailsProp
           {project.current_phase === 'CONTROL' && (
             <ControlPhase projectId={project.id} onComplete={() => onUpdate()} />
           )}
+        </div>
+      )}
+
+      {activeTab === 'comments' && (
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+          <CommentSection projectId={project.id} />
         </div>
       )}
     </div>

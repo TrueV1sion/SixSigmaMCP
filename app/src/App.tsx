@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react';
 import { supabase, type Project } from './lib/supabase';
+import { useAuth } from './contexts/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import OrganizationSetup from './components/auth/OrganizationSetup';
 import ProjectList from './components/ProjectList';
 import ProjectDetails from './components/ProjectDetails';
 import CreateProject from './components/CreateProject';
-import { Plus } from 'lucide-react';
+import Header from './components/Header';
 
 function App() {
+  const { profile } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [needsOrgSetup, setNeedsOrgSetup] = useState(false);
 
   useEffect(() => {
-    loadProjects();
-  }, []);
+    if (profile) {
+      if (!profile.organization_id) {
+        setNeedsOrgSetup(true);
+        setLoading(false);
+      } else {
+        setNeedsOrgSetup(false);
+        loadProjects();
+      }
+    }
+  }, [profile]);
 
   const loadProjects = async () => {
     setLoading(true);
@@ -49,63 +62,57 @@ function App() {
     }
   };
 
+  if (needsOrgSetup) {
+    return (
+      <ProtectedRoute>
+        <OrganizationSetup onComplete={() => setNeedsOrgSetup(false)} />
+      </ProtectedRoute>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">Six Sigma DMAIC</h1>
-              <p className="text-slate-600 mt-1">Quality-driven project management system</p>
-            </div>
-            <button
-              onClick={() => setShowCreateForm(true)}
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-            >
-              <Plus size={20} />
-              New Project
-            </button>
-          </div>
-        </div>
-      </header>
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <Header onCreateProject={() => setShowCreateForm(true)} />
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {showCreateForm ? (
-          <div className="mb-8">
-            <CreateProject
-              onCancel={() => setShowCreateForm(false)}
-              onSuccess={handleProjectCreated}
-            />
-          </div>
-        ) : null}
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <ProjectList
-              projects={projects}
-              selectedProject={selectedProject}
-              onSelectProject={setSelectedProject}
-              loading={loading}
-            />
-          </div>
-
-          <div className="lg:col-span-2">
-            {selectedProject ? (
-              <ProjectDetails
-                project={selectedProject}
-                onUpdate={handleProjectUpdated}
+        <main className="max-w-7xl mx-auto px-6 py-8">
+          {showCreateForm ? (
+            <div className="mb-8">
+              <CreateProject
+                onCancel={() => setShowCreateForm(false)}
+                onSuccess={handleProjectCreated}
               />
-            ) : (
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-                <div className="text-slate-400 text-lg">
-                  Select a project to view details
+            </div>
+          ) : null}
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1">
+              <ProjectList
+                projects={projects}
+                selectedProject={selectedProject}
+                onSelectProject={setSelectedProject}
+                loading={loading}
+              />
+            </div>
+
+            <div className="lg:col-span-2">
+              {selectedProject ? (
+                <ProjectDetails
+                  project={selectedProject}
+                  onUpdate={handleProjectUpdated}
+                />
+              ) : (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+                  <div className="text-slate-400 text-lg">
+                    Select a project to view details
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </ProtectedRoute>
   );
 }
 
